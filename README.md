@@ -31,10 +31,10 @@ MIT for the software and CC BY 4.0 for original scientific/content material.
 
 ## Citation
 
-A permanent citation and DOI will be provided through **Zenodo** when Version 1.0.0 is formally released.
-
-In the meantime, users wishing to refer to the conceptual framework should cite the associated preprint:
+If you use the Interactive SE–BCT Sequencing Framework, please cite:
 
 > Mazéas A, Ntoumanis N. *Toward a sequencing framework for teaching and using self-enactable behavior change techniques: a conceptual review and proposed approach* [Preprint]. 2026. https://doi.org/10.31234/osf.io/zxr7b_v1
 
-Citation information for the interactive resource itself will be updated once the Zenodo DOI is available.
+If you specifically use or refer to the interactive web-based implementation, you may additionally cite the archived software version:
+
+Mazéas, A., & Ntoumanis, N. (2026). *Interactive SE–BCT Sequencing Framework* (Version 1.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.22047154
