@@ -1,0 +1,285 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Interactive SE-BCT Sequencing Framework — Mazéas &amp; Ntoumanis, 2026</title>
+
+<style>
+
+:root { --ink:#22252b; --muted:#69707d; --paper:#f7f7f4; --panel:#ffffff; --line:#dedfd9; --shadow:0 14px 40px rgba(30,35,40,.12);
+
+}
+
+*{box-sizing:border-box}
+
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}
+
+button,input,select{font:inherit}
+
+.header{padding:28px 30px 18px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+
+.header-row{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;max-width:1500px;margin:auto}
+
+h1{font-size:26px;line-height:1.12;margin:0 0 7px}
+
+.subtitle{color:var(--muted);max-width:900px;line-height:1.45}
+
+.badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+.badge{background:#f0f1ed;border:1px solid #dedfd9;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+
+.controls{max-width:1500px;margin:14px auto 0;display:flex;gap:8px;flex-wrap:wrap}
+
+.search{flex:1;min-width:260px;border:1px solid #cfd2cc;background:#fff;border-radius:10px;padding:10px 12px}
+
+.control{border:1px solid #cfd2cc;background:#fff;border-radius:10px;padding:9px 12px;cursor:pointer}
+
+.control:hover{background:#f3f4f1}
+
+.wrapper{max-width:1500px;margin:0 auto;padding:20px 30px 56px}
+
+.guide{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 16px;margin-bottom:18px;color:#4e5560;line-height:1.45}
+
+.timeline-head{display:grid;grid-template-columns:220px repeat(4,1fr);gap:0;align-items:end;margin-bottom:8px}
+
+.timeline-head .blank{padding:6px 10px}
+
+.phase{font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:800;color:#505761;text-align:center;padding:9px 8px;border-left:1px solid var(--line)}
+
+.phase:last-child{border-right:1px solid var(--line)}
+
+.cluster{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+
+.cluster-head{display:grid;grid-template-columns:220px 1fr;align-items:stretch;cursor:pointer}
+
+.cluster-title{display:flex;align-items:center;gap:11px;padding:15px 16px;font-weight:800}
+
+.dot{width:13px;height:13px;border-radius:50%;flex:none}
+
+.chev{margin-left:auto;transition:transform .2s;color:#777}
+
+.cluster.open .chev{transform:rotate(90deg)}
+
+.cluster-summary{display:grid;grid-template-columns:repeat(4,1fr);min-height:54px;position:relative}
+
+.cluster-summary>div{border-left:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+
+.cluster-summary>div:last-child{border-right:1px solid var(--line)}
+
+.summary-mark{height:10px;border-radius:10px;width:55%;opacity:.55}
+
+.group-wrap{display:none;border-top:1px solid var(--line);padding:7px 0 10px}
+
+.cluster.open .group-wrap{display:block}
+
+.group-row{display:grid;grid-template-columns:220px 1fr;min-height:48px;align-items:stretch}
+
+.group-label{padding:9px 16px 9px 38px;display:flex;align-items:center;gap:7px}
+
+.group-name{font-size:14px;font-weight:700}
+
+.count{font-size:11px;color:#777;background:#f0f1ed;padding:2px 6px;border-radius:999px}
+
+.track{position:relative;display:grid;grid-template-columns:repeat(4,1fr);align-items:center}
+
+.track .cell{height:100%;border-left:1px solid var(--line)}
+
+.track .cell:last-child{border-right:1px solid var(--line)}
+
+.bar{position:absolute;height:26px;border-radius:8px;top:50%;transform:translateY(-50%);cursor:pointer;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 3px rgba(0,0,0,.06);transition:.15s ease}
+
+.bar:hover{transform:translateY(-50%) scaleY(1.08);filter:saturate(1.1)}
+
+.bar.fade{mask-image:linear-gradient(to right,#000 0%,#000 73%,rgba(0,0,0,.35) 90%,transparent 100%);-webkit-mask-image:linear-gradient(to right,#000 0%,#000 73%,rgba(0,0,0,.35) 90%,transparent 100%)}
+
+.bar-label{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;color:rgba(20,20,20,.78);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 20px);pointer-events:none}
+
+.hidden{display:none!important}
+
+.empty{padding:36px;text-align:center;color:var(--muted)} /* Drawer */
+
+.backdrop{position:fixed;inset:0;background:rgba(25,28,33,.22);display:none;z-index:39}
+
+.backdrop.show{display:block}
+
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(520px,94vw);background:#fff;z-index:40;transform:translateX(103%);transition:transform .24s ease;box-shadow:var(--shadow);display:flex;flex-direction:column}
+
+.drawer.show{transform:translateX(0)}
+
+.drawer-head{padding:22px 22px 16px;border-bottom:1px solid var(--line)}
+
+.drawer-top{display:flex;align-items:flex-start;gap:10px}
+
+.drawer h2{margin:0;font-size:23px;line-height:1.15}
+
+.close{margin-left:auto;border:0;background:#f1f2ef;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:19px}
+
+.meta{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 0}
+
+.meta span{font-size:11px;font-weight:750;padding:5px 8px;background:#f0f1ed;border-radius:999px}
+
+.drawer-body{padding:19px 22px 34px;overflow:auto}
+
+.note{line-height:1.5;color:#4e5560;margin:0 0 18px}
+
+.tech-title{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#737b85;font-weight:900;margin:20px 0 9px}
+
+.tech-list{display:grid;gap:7px}
+
+.tech{border:1px solid #e0e2dd;border-radius:10px;padding:10px 11px;display:flex;gap:10px;align-items:flex-start;background:#fcfcfb}
+
+.num{min-width:42px;font-weight:900;font-size:12px;padding:3px 6px;border-radius:7px;background:#eceee9;text-align:center}
+
+.tech-name{font-size:14px;line-height:1.35;flex:1}
+
+.tech-content{display:flex;flex-direction:column;gap:7px;min-width:0;flex:1}
+
+.mode-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+
+.mode-label{font-size:10px;text-transform:uppercase;letter-spacing:.055em;font-weight:900;color:#7a8088}
+
+.mode-pill{font-size:11px;font-weight:800;line-height:1.25;padding:5px 8px;border-radius:999px;border:1px solid transparent}
+.prereq-row{margin-top:2px;padding-top:7px;border-top:1px solid #eceee9;display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap}
+.prereq-label{font-size:10px;text-transform:uppercase;letter-spacing:.055em;font-weight:900;color:#7a8088}
+.prereq-text{font-size:12px;line-height:1.4;color:#555d67;font-weight:650;flex:1;min-width:180px}
+
+.mode-p{background:#eef3e7;color:#4f6140;border-color:#dbe6cf}
+
+.mode-r{background:#f5e8e5;color:#7a4a42;border-color:#ead2cd}
+
+.mode-pr{background:#f6f0df;color:#6f5d2e;border-color:#e9ddb9}
+
+.mode-m{background:#eceaf2;color:#5d536f;border-color:#dad5e5}
+
+.citation{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:22px;line-height:1.55}
+.citation h2{margin:0 0 10px;font-size:18px}
+.citation p{margin:8px 0;color:#4e5560}
+.citation a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.citation .citation-label{font-weight:800;color:var(--ink)}
+ @media (max-width:800px){ .header{position:static;padding:22px 16px 14px} .header-row{display:block} .badges{justify-content:flex-start;margin-top:12px} .wrapper{padding:16px 12px 42px} .timeline-head{grid-template-columns:145px repeat(4,1fr)} .cluster-head,.group-row{grid-template-columns:145px 1fr} .cluster-title{padding:12px 10px;font-size:13px} .group-label{padding-left:20px} .group-name{font-size:12px} .bar-label{display:none} .phase{font-size:9px;padding:7px 2px;writing-mode:vertical-rl;transform:rotate(180deg);height:88px}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header"> <div class="header-row"> <div> <h1>Interactive SE-BCT Sequencing Framework — <span style="font-weight:500;color:#7a8088">Mazéas &amp; Ntoumanis, 2026</span></h1> <div class="subtitle">Explore the sequencing of self-enactable behavior change techniques (SE-BCTs). Select a cluster (e.g., self-efficacy) to reveal its groups, then select a group bar (e.g., vicarious experience) to view the individual SE-BCTs and their mode of enactment (e.g., primarily prospective).</div> </div> <div class="badges"> <span class="badge">9 clusters</span><span class="badge">27 groups</span><span class="badge">108 techniques</span><span class="badge">4 phases</span> </div> </div> <div class="controls"> <input id="search" class="search" type="search" aria-label="Search clusters, groups, or techniques" placeholder="Search cluster, group, or technique (e.g., habit, #70, self-monitoring)…"> <select id="phaseFilter" class="control" aria-label="Filter by phase"> <option value="all">All phases</option> <option value="0">Contemplation / Deliberation</option> <option value="1">Planning / Preparation</option> <option value="2">Action</option> <option value="3">Post-action / Maintenance</option> </select> <button id="expandAll" class="control">Expand all</button> <button id="collapseAll" class="control">Collapse all</button> </div>
+
+</header> <main class="wrapper"> <div class="guide"><strong>How to read it:</strong> horizontal bars indicate the phases (e.g., contemplation/deliberation) in which a group is proposed to be relevant. The left edge of a bar indicates its first proposed introduction, and the right edge indicates when it is proposed to cease being highly relevant. Faded bars indicate groups for which some techniques may be gradually withdrawn during maintenance. Phases (e.g., contemplation/deliberation or planning/preparation) are conceptualized as overlapping temporal scaffolds rather than mutually exclusive stages.</div> <div class="timeline-head"> <div class="blank"></div> <div class="phase">Contemplation / Deliberation</div> <div class="phase">Planning / Preparation</div> <div class="phase">Action</div> <div class="phase">Post-action / Maintenance</div> </div> <div id="app"></div>
+
+<section id="citation" class="citation" aria-labelledby="citation-title">
+  <h2 id="citation-title">Citation</h2>
+
+  <p>
+    <span class="citation-label">If you use the SE–BCT sequencing framework in your research, please cite:</span>
+  </p>
+
+  <p>
+    Mazéas A, Ntoumanis N. <em>Toward a sequencing framework for teaching and
+    using self-enactable behavior change techniques: a conceptual review and
+    proposed approach</em> [Preprint]. 2026.
+    <a href="https://doi.org/10.31234/osf.io/zxr7b_v1">
+      https://doi.org/10.31234/osf.io/zxr7b_v1
+    </a>
+  </p>
+
+  <p>
+    The archived version of this interactive resource is available on Zenodo:
+    <a href="https://doi.org/10.5281/zenodo.22047154">
+      https://doi.org/10.5281/zenodo.22047154
+    </a>
+  </p>
+</section>
+
+
+</main> <div id="backdrop" class="backdrop"></div>
+
+<aside id="drawer" class="drawer" aria-hidden="true"> <div class="drawer-head"> <div class="drawer-top"> <div><div id="drawerCluster" style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#777"></div> <h2 id="drawerTitle"></h2></div> <button id="closeDrawer" class="close" aria-label="Close">×</button> </div> <div id="drawerMeta" class="meta"></div> </div> <div class="drawer-body"> <p id="drawerNote" class="note"></p> <div class="tech-title">Techniques in this group</div> <div id="techList" class="tech-list"></div> </div>
+
+</aside> <script>
+
+const DATA = [{"name": "Preparation", "color": "#9AAA76", "groups": [{"name": "Knowledge", "phases": [0], "note": "Information about antecedents, consequences, credible sources, and how to perform the behavior.", "techniques": [[34, "Obtain information about antecedents", "Primarily prospective"], [35, "Obtain information about health consequences", "Primarily prospective"], [36, "Obtain information about social/environmental consequences", "Primarily prospective"], [37, "Obtain information about emotional consequences", "Primarily prospective"], [39, "Credible source", "Primarily prospective"], [56, "Obtain instruction on how to perform the behavior", "Primarily prospective"]]}, {"name": "Framing", "phases": [0], "note": "Generate, compare, and reframe behavior-change options and beliefs.", "techniques": [[1, "Agenda mapping", "Primarily prospective"], [2, "Brainstorm options", "Primarily prospective"], [3, "Consider behavior change options", "Primarily prospective"], [4, "Hypothetical thinking", "Primarily prospective"], [42, "Contrast/compare pros and cons", "Primarily prospective"], [43, "Comparative imagining of future outcomes", "Primarily prospective"], [68, "Reframing", "Primarily prospective"], [103, "Critically assess beliefs", "Primarily prospective"]]}, {"name": "Action planning", "phases": [1, 2, 3], "note": "Translate intentions and goals into actionable plans and problem-solving strategies.", "techniques": [[7, "Problem solving", "Primarily prospective"], [8, "Action planning", "Primarily prospective"], [33, "Behavioral experiments", "Primarily prospective"], [41, "Memory aids", "Primarily prospective"]]}]}, {"name": "Self-efficacy", "color": "#C65F55", "groups": [{"name": "Vicarious experience", "phases": [0, 1], "note": "Support perceived capability through observation and comparison.", "techniques": [[46, "Observe demonstration of the behavior", "Primarily prospective"], [47, "Vicarious consequences", "Primarily prospective"], [48, "Social comparison", "Primarily prospective"]]}, {"name": "Verbal persuasion", "phases": [0, 1], "note": "Strengthen perceived capability through reflection and self-persuasion.", "techniques": [[99, "Reflect on ability to perform behavior", "Primarily prospective"], [107, "Verbal self-persuasion about own capability", "Primarily prospective"]]}, {"name": "Cognitive reappraisal", "phases": [1, 2, 3], "note": "Protect or restore self-efficacy when difficulty, failure, or setbacks occur.", "techniques": [[118, "Gain/loss framing", "Primarily prospective"], [117, "Re-attribution", "Primarily reactive"], [116, "Acceptance", "Prospective strategy, reactive activation"], [115, "Self-kindness", "Prospective strategy, reactive activation"], [114, "Normalize difficulty", "Prospective strategy, reactive activation"], [110, "Positive reframing", "Primarily reactive"]]}, {"name": "Performance accomplishment", "phases": [1, 2, 3], "note": "Build capability through mastery, graded challenge, rehearsal, and successful experience.", "techniques": [[108, "Mental rehearsal of successful performance", "Primarily prospective"], [112, "Looking back", "Primarily prospective"], [111, "Focus on past success", "Primarily prospective"], [74, "Graded tasks", "Primarily prospective"], [69, "Behavioral practice or rehearsal", "Primarily prospective"], [31, "Add challenge", "Primarily prospective"], [30, "Task crafting (skills and ability)", "Primarily prospective"], [67, "Behavior substitution", "Primarily prospective"]]}]}, {"name": "Emotions", "color": "#66B4A8", "groups": [{"name": "Emotion regulation", "phases": [0, 1, 2, 3], "note": "Monitor and regulate emotional and physiological states across the behavior-change process.", "techniques": [[19, "Monitoring of emotional consequences", "Ongoing diagnostic/monitoring"], [113, "Manage negative emotions", "Prospective strategy, reactive activation"], [119, "Interpreting physiological and emotional states", "Prospective strategy, reactive activation"]]}, {"name": "Coping with stereotyping", "phases": [0], "note": "Address stereotype-related barriers that may influence desirability or feasibility of change.", "techniques": [[49, "Avoid stereotyping and prejudice", "Prospective strategy, reactive activation"], [50, "Personal contact with the outgroup", "Primarily prospective"], [51, "Stereotype-inconsistent information", "Primarily prospective"]]}, {"name": "Enjoyment", "phases": [1, 2, 3], "note": "Support positive affect and enjoyment associated with the target behavior.", "techniques": [[29, "Task crafting (enjoyment)", "Primarily prospective"], [40, "Make consequences more memorable", "Primarily prospective"], [109, "Focus on enjoyment of behavior", "Prospective strategy, reactive activation"]]}]}, {"name": "Social support", "color": "#6E9EBC", "groups": [{"name": "Social support", "phases": [0, 1, 2, 3], "note": "Mobilize practical, emotional, and rewarding forms of social support.", "techniques": [[54, "Obtain practical social support", "Primarily prospective"], [55, "Obtain emotional social support", "Primarily prospective"], [86, "Social reward", "Primarily reactive"], [121, "Identify ways of dealing with pressure", "Primarily prospective"]]}, {"name": "Awareness of the social environment", "phases": [0], "note": "Identify social approval, pressure, and features of the social environment relevant to change.", "techniques": [[38, "Obtain information about others' approval", "Primarily prospective"], [120, "Identify sources of pressure for behavior", "Primarily prospective"], [26, "Restructuring the social environment", "Primarily prospective"]]}, {"name": "Public commitment", "phases": [1, 2], "note": "Strengthen accountability and commitment to planned behavior.", "techniques": [[13, "Public commitment", "Primarily prospective"], [14, "Make a behavioral contract", "Primarily prospective"]]}, {"name": "Support others", "phases": [3], "note": "Embed maintained behavior in meaningful social roles and relationships.", "techniques": [[52, "Support others", "Primarily prospective"], [53, "Identification of self as role model", "Primarily prospective"]]}]}, {"name": "Self-motivation", "color": "#8D7E99", "groups": [{"name": "Autonomy", "phases": [0, 1, 2, 3], "note": "Support self-endorsed reasons, meaning, and commitment.", "techniques": [[12, "Self-commitment", "Primarily prospective"], [98, "Reflect on desire to perform the behavior", "Primarily prospective"], [100, "Reflect on reasons to perform the behavior", "Primarily prospective"], [101, "Reflect on need to perform the behavior", "Primarily prospective"], [102, "Find meaning in target behavior", "Primarily prospective"], [122, "Emphasize autonomy", "Primarily prospective"]]}, {"name": "Action control", "phases": [2, 3], "note": "Maintain an active intention and effort in the face of competing demands.", "techniques": [[20, "Self-monitoring of motivation", "Ongoing diagnostic/monitoring"], [57, "Remind of outcome goal content", "Primarily prospective"], [58, "Action control (keep goals in mind)", "Prospective strategy, reactive activation"], [59, "Action control (maximize effort)", "Prospective strategy, reactive activation"]]}, {"name": "Self-identity", "phases": [3], "note": "Integrate the changed behavior with identity during maintenance.", "techniques": [[104, "Incompatible beliefs", "Primarily prospective"], [105, "Associate identity with changed behavior", "Primarily prospective"], [106, "Valued self-identity (personal strengths)", "Primarily prospective"]]}]}, {"name": "Goals", "color": "#E5A047", "groups": [{"name": "Goal setting", "phases": [1, 2, 3], "note": "Set behavioral and outcome goals, with an early emphasis on learning goals and a later shift toward performance goals.", "techniques": [[5, "Behavioral goal setting", "Primarily prospective"], [6, "Outcome goal setting", "Primarily prospective"]]}, {"name": "Goal review", "phases": [1, 2, 3], "note": "Review goals and discrepancies between goals and current behavior.", "techniques": [[9, "Review behavioral goal(s)", "Primarily prospective"], [10, "Review outcome goal(s)", "Primarily prospective"], [11, "Discrepancy between current behavior and goal", "Primarily prospective"]]}, {"name": "Goal integration", "phases": [1, 2, 3], "note": "Integrate the target behavior with everyday goals, routines, and broader contexts.", "techniques": [[32, "Goal integration", "Primarily prospective"], [73, "Generalization of target behavior", "Primarily prospective"]]}]}, {"name": "Behavioral regulation", "color": "#B98FA8", "groups": [{"name": "Feedback", "phases": [1, 2, 3], "note": "Use feedback to inform adjustment and progress.", "techniques": [[15, "Obtain feedback on behavior", "Primarily prospective"], [16, "Obtain feedback on outcomes of behavior", "Primarily prospective"]]}, {"name": "Self-monitoring", "phases": [1, 2, 3], "note": "Monitor behavior and outcomes to detect progress and discrepancies.", "techniques": [[17, "Self-monitoring of behavior", "Ongoing diagnostic/monitoring"], [18, "Self-monitoring of outcomes of behavior", "Ongoing diagnostic/monitoring"]]}, {"name": "Distraction", "phases": [1, 2, 3], "note": "Reduce exposure to tempting cues or redirect attention when unwanted impulses arise.", "techniques": [[62, "Avoid cues for the unwanted behavior", "Primarily prospective"], [63, "Distraction", "Prospective strategy, reactive activation"], [64, "Conserving mental resources", "Primarily prospective"]]}]}, {"name": "Habits", "color": "#BEBB72", "groups": [{"name": "Environmental restructuring", "phases": [1, 2, 3], "fade": true, "note": "Restructure cues and environments to support behavior; some supports may be gradually withdrawn during maintenance.", "techniques": [[24, "Adding objects to the environment", "Primarily prospective"], [25, "Restructuring the physical environment", "Primarily prospective"], [27, "Remove access to rewards for unwanted behavior", "Primarily prospective"], [60, "Prompts/cues", "Primarily prospective"], [61, "Reduce prompts/cues", "Primarily prospective"]]}, {"name": "Behavioral repetition", "phases": [2, 3], "note": "Support repetition and automaticity once action is underway.", "techniques": [[70, "Habit formation", "Primarily prospective"], [71, "Habit reversal", "Primarily prospective"], [72, "Overcorrection", "Primarily prospective"], [77, "Associative learning", "Primarily prospective"]]}]}, {"name": "Reinforcement", "color": "#C7A477", "groups": [{"name": "Behavior incentives", "phases": [1, 2, 3], "fade": true, "note": "Reinforce performance of the target behavior; some incentives may be gradually withdrawn during maintenance.", "techniques": [[78, "Self-incentive (behavior)", "Primarily prospective"], [79, "Incentivized self-praise (behavior)", "Primarily reactive"], [80, "Self-reward (behavior)", "Primarily reactive"], [81, "Self-praise (behavior)", "Primarily reactive"], [87, "Self-incentive based on situation", "Primarily prospective"], [88, "Self-incentive based on approximation", "Primarily prospective"], [90, "Self-incentive (duration/frequency)", "Primarily prospective"], [94, "Remove reward or incentive", "Primarily reactive"]]}, {"name": "Outcome incentives", "phases": [1, 2, 3], "fade": true, "note": "Reinforce achievement of outcomes or milestones; some incentives may be gradually withdrawn during maintenance.", "techniques": [[76, "Exposure", "Primarily prospective"], [82, "Self-incentive (outcome)", "Primarily prospective"], [83, "Incentivized self-praise (outcome)", "Primarily reactive"], [84, "Self-reward (outcome)", "Primarily reactive"], [85, "Self-praise (outcome)", "Primarily reactive"], [89, "Self-incentive based on completion", "Primarily prospective"], [97, "Imaginary reward", "Primarily reactive"]]}]}];
+
+const PREREQUISITES = {"2":[1],"3":[2],"4":[1],"9":[5],"10":[6],"11":[5,6,8],"14":[5],"40":[35,36,37],"57":[6],"58":[5],"61":[60],"70":[69],"71":[67],"74":[5],"79":[5],"82":[6],"83":[6],"88":[5,74],"97":[108],"118":[35,36,37],"121":[120]};
+const TECHNIQUE_BY_ID = Object.fromEntries(
+  DATA.flatMap(c => c.groups.flatMap(g => g.techniques)).map(t => [t[0], t])
+);
+
+const PHASES = ["Contemplation / Deliberation", "Planning / Preparation", "Action", "Post-action / Maintenance"]; const app = document.getElementById('app');
+
+const search = document.getElementById('search');
+
+const phaseFilter = document.getElementById('phaseFilter');
+
+const drawer = document.getElementById('drawer');
+
+const backdrop = document.getElementById('backdrop'); function esc(s) { return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+function modeClass(mode) {
+
+  if (mode === 'Primarily reactive') return 'mode-r';
+
+  if (mode === 'Prospective strategy, reactive activation') return 'mode-pr';
+
+  if (mode === 'Ongoing diagnostic/monitoring') return 'mode-m';
+
+  return 'mode-p';
+
+}
+
+function rgba(hex, a) { const h = hex.replace('#',''); const n = parseInt(h,16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+
+}
+
+function phaseSpan(phases) { const min = Math.min(...phases), max = Math.max(...phases); return {left: min*25, width:(max-min+1)*25};
+
+}
+
+function clusterPhases(c) { return [...new Set(c.groups.flatMap(g => g.phases))].sort();
+
+}
+
+function matchesQuery(c,g,q) { if (!q) return true; q=q.toLowerCase(); if (c.name.toLowerCase().includes(q) || g.name.toLowerCase().includes(q) || g.note.toLowerCase().includes(q)) return true; return g.techniques.some(t => (`#${t[0]} ${t[1]}`).toLowerCase().includes(q));
+
+}
+
+function render() { const q = search.value.trim().toLowerCase(); const pf = phaseFilter.value; app.innerHTML=''; let any=false; DATA.forEach((c, ci) => { const qualifying = c.groups.filter(g => matchesQuery(c,g,q) && (pf==='all' || g.phases.includes(Number(pf)))); if (!qualifying.length) return; any=true; const section = document.createElement('section'); section.className = 'cluster' + (q ? ' open' : ''); section.dataset.ci=ci; const cph = clusterPhases(c); const summaryCells = [0,1,2,3].map(p => `<div>${cph.includes(p) ? `<span class="summary-mark" style="background:${c.color}"></span>` : ''}</div>` ).join(''); section.innerHTML = ` <div class="cluster-head" role="button" tabindex="0"> <div class="cluster-title"><span class="dot" style="background:${c.color}"></span><span>${esc(c.name)}</span><span class="chev">›</span></div> <div class="cluster-summary">${summaryCells}</div> </div> <div class="group-wrap"></div>`; const wrap = section.querySelector('.group-wrap'); qualifying.forEach((g, giOriginal) => { const gi = c.groups.indexOf(g); const sp = phaseSpan(g.phases); const row = document.createElement('div'); row.className='group-row'; row.innerHTML = ` <div class="group-label"><span class="group-name">${esc(g.name)}</span><span class="count">${g.techniques.length}</span></div> <div class="track"> <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div> <div class="bar ${g.fade?'fade':''}" data-ci="${ci}" data-gi="${gi}" style="left:${sp.left}%;width:${sp.width}%;background:${rgba(c.color,.72)}"> <span class="bar-label">${esc(g.name)}</span> </div> </div>`; wrap.appendChild(row); }); const head = section.querySelector('.cluster-head'); const toggle=()=>section.classList.toggle('open'); head.addEventListener('click',toggle); head.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}}); app.appendChild(section); }); document.querySelectorAll('.bar').forEach(bar => { bar.addEventListener('click', e => { e.stopPropagation(); openGroup(Number(bar.dataset.ci), Number(bar.dataset.gi)); }); }); if(!any) app.innerHTML='<div class="empty">No matching clusters, groups, or techniques.</div>';
+
+} function openGroup(ci,gi) { const c=DATA[ci], g=c.groups[gi]; document.getElementById('drawerCluster').textContent=c.name; document.getElementById('drawerCluster').style.color=c.color; document.getElementById('drawerTitle').textContent=g.name; document.getElementById('drawerNote').textContent=g.note; const meta=document.getElementById('drawerMeta'); const first=Math.min(...g.phases); meta.innerHTML = `<span>First introduced: ${PHASES[first]}</span><span>Relevant: ${g.phases.map(p=>PHASES[p]).join(' → ')}</span><span>${g.techniques.length} techniques</span>${g.fade?'<span>Gradual withdrawal in maintenance</span>':''}`; const list=document.getElementById('techList'); list.innerHTML=g.techniques.map(t=>{ const prereqIds=PREREQUISITES[t[0]]||[]; const prereqHtml=prereqIds.length ? `<div class="prereq-row"><span class="prereq-label">${prereqIds.length>1?'Prerequisites':'Prerequisite'}</span><span class="prereq-text">${prereqIds.map(id=>{const p=TECHNIQUE_BY_ID[id]; return `${esc(p[1])} [#${id}]`;}).join('; ')}</span></div>` : ''; return `<div class="tech"><span class="num">#${t[0]}</span><div class="tech-content"><span class="tech-name">${esc(t[1])}</span><div class="mode-row"><span class="mode-label">Mode of enactment</span><span class="mode-pill ${modeClass(t[2])}">${esc(t[2])}</span></div>${prereqHtml}</div></div>`; }).join(''); drawer.classList.add('show'); backdrop.classList.add('show'); drawer.setAttribute('aria-hidden','false');
+
+}
+
+function closeDrawer() { drawer.classList.remove('show'); backdrop.classList.remove('show'); drawer.setAttribute('aria-hidden','true');
+
+}
+
+document.getElementById('closeDrawer').addEventListener('click',closeDrawer);
+
+backdrop.addEventListener('click',closeDrawer);
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+
+search.addEventListener('input',render);
+
+phaseFilter.addEventListener('change',render);
+
+document.getElementById('expandAll').addEventListener('click',()=>document.querySelectorAll('.cluster').forEach(x=>x.classList.add('open')));
+
+document.getElementById('collapseAll').addEventListener('click',()=>document.querySelectorAll('.cluster').forEach(x=>x.classList.remove('open')));
+
+render();
+
+</script>
+</body>
+
+</html>
+
