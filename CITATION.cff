@@ -1,9 +1,8 @@
 cff-version: 1.2.0
-message: "If you use this resource, please cite it using the citation metadata provided here."
+message: "If you use this software, please cite it using these metadata."
 title: "Interactive SE-BCT Sequencing Framework"
 authors:
-
-* family-names: "Mazéas"
-  given-names: "Alexandre"
-* family-names: "Ntoumanis"
-  given-names: "Nikos"
+  - family-names: "Mazéas"
+    given-names: "Alexandre"
+  - family-names: "Ntoumanis"
+    given-names: "Nikos"
