@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use the Interactive SE–BCT Sequencing Framework, please cite this software using the citation below."
+type: software
+
+title: "Interactive SE–BCT Sequencing Framework"
+version: 1.0.0
+
+authors:
+  - family-names: "Mazéas"
+    given-names: "Alexandre"
+  - family-names: "Ntoumanis"
+    given-names: "Nikos"
+
+abstract: >-
+  An interactive web-based resource for exploring the proposed sequencing
+  of self-enactable behavior change techniques (SE-BCTs). Users can navigate
+  clusters and groups, examine when groups are proposed to be most relevant
+  across the behavior-change process, and view individual SE-BCTs together
+  with their mode of enactment and, where applicable, prerequisite techniques.
+
+license: MIT
+
+keywords:
+  - behavior change
+  - behavior change techniques
+  - self-enactable behavior change techniques
+  - SE-BCT
+  - intervention development
+  - sequencing
