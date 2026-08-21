@@ -7,23 +7,23 @@ doi: "10.5281/zenodo.22047154"
 
 authors:
 
-family-names: "Mazéas"
-given-names: "Alexandre"
-family-names: "Ntoumanis"
-given-names: "Nikos"
+* family-names: "Mazéas"
+  given-names: "Alexandre"
+* family-names: "Ntoumanis"
+  given-names: "Nikos"
 
 license: MIT
 
 keywords:
 
-"behavior change"
-"behavior change techniques"
-"self-enactable behavior change techniques"
-"SE-BCT"
-"sequencing"
+* "behavior change"
+* "behavior change techniques"
+* "self-enactable behavior change techniques"
+* "SE-BCT"
+* "sequencing"
 
 preferred-citation:
-type: preprint
+type: unpublished
 authors:
 - family-names: "Mazéas"
 given-names: "Alexandre"
