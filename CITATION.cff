@@ -1,43 +1,35 @@
-```yaml
 cff-version: 1.2.0
-message: "If you use the SE–BCT sequencing framework in your research, please cite the associated paper below. The archived interactive resource is also identified by its Zenodo DOI."
-
-type: software
+message: "If you use the SE–BCT sequencing framework in your research, please cite the associated paper listed under preferred-citation."
 title: "Interactive SE–BCT Sequencing Framework"
-version: 1.0.0
+type: software
+version: "1.0.0"
 doi: "10.5281/zenodo.22047154"
 
 authors:
-  - family-names: "Mazéas"
-    given-names: "Alexandre"
-  - family-names: "Ntoumanis"
-    given-names: "Nikos"
 
-abstract: >-
-  An interactive web-based resource for exploring the proposed sequencing
-  of self-enactable behavior change techniques (SE-BCTs). Users can navigate
-  clusters and groups, examine when groups are proposed to be most relevant
-  across the behavior-change process, and view individual SE-BCTs together
-  with their mode of enactment and, where applicable, prerequisite techniques.
+family-names: "Mazéas"
+given-names: "Alexandre"
+family-names: "Ntoumanis"
+given-names: "Nikos"
 
 license: MIT
 
 keywords:
-  - behavior change
-  - behavior change techniques
-  - self-enactable behavior change techniques
-  - SE-BCT
-  - intervention development
-  - sequencing
+
+"behavior change"
+"behavior change techniques"
+"self-enactable behavior change techniques"
+"SE-BCT"
+"sequencing"
 
 preferred-citation:
-  type: preprint
-  authors:
-    - family-names: "Mazéas"
-      given-names: "Alexandre"
-    - family-names: "Ntoumanis"
-      given-names: "Nikos"
-  title: "Toward a sequencing framework for teaching and using self-enactable behavior change techniques: a conceptual review and proposed approach"
-  year: 2026
-  doi: "10.31234/osf.io/zxr7b_v1"
-```
+type: preprint
+authors:
+- family-names: "Mazéas"
+given-names: "Alexandre"
+- family-names: "Ntoumanis"
+given-names: "Nikos"
+title: "Toward a sequencing framework for teaching and using self-enactable behavior change techniques: a conceptual review and proposed approach"
+year: 2026
+status: preprint
+doi: "10.31234/osf.io/zxr7b_v1"
