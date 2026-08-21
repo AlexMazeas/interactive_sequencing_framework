@@ -1,9 +1,10 @@
 cff-version: 1.2.0
-message: "If you use the Interactive SE–BCT Sequencing Framework, please cite this software using the citation below."
-type: software
+message: "If you use the SE–BCT sequencing framework in your research, please cite the associated paper below. The archived interactive resource is also identified by its Zenodo DOI."
 
+type: software
 title: "Interactive SE–BCT Sequencing Framework"
 version: 1.0.0
+doi: "10.5281/zenodo.22047154"
 
 authors:
   - family-names: "Mazéas"
@@ -27,3 +28,15 @@ keywords:
   - SE-BCT
   - intervention development
   - sequencing
+
+preferred-citation:
+  type: preprint
+  authors:
+    - family-names: "Mazéas"
+      given-names: "Alexandre"
+    - family-names: "Ntoumanis"
+      given-names: "Nikos"
+  title: "Toward a sequencing framework for teaching and using self-enactable behavior change techniques: a conceptual review and proposed approach"
+  year: 2026
+  doi: "10.31234/osf.io/zxr7b_v1"
+```
