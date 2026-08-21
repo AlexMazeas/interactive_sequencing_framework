@@ -6,7 +6,7 @@ Users can navigate clusters and groups of SE-BCTs, examine when different groups
 
 ## Explore the interactive framework
 
-**Interactive website:** [Interactive SE–BCT Sequencing Framework]https://alexmazeas.github.io/interactive_sequencing_framework/
+**Interactive website:** https://alexmazeas.github.io/interactive_sequencing_framework/
 
 ## Authors
 
@@ -27,7 +27,7 @@ This version corresponds to the initial release of the Interactive SE–BCT Sequ
 
 ## License
 
-License information will be added before the first archived release.
+MIT for the software and CC BY 4.0 for original scientific/content material.
 
 ## Citation
 
