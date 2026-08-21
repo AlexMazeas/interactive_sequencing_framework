@@ -1,6 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using these metadata."
 title: "Interactive SE-BCT Sequencing Framework"
+doi: 10.5281/zenodo.22047154
 authors:
 
 * family-names: "Mazéas"
