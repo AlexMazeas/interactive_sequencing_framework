@@ -15,7 +15,7 @@ Users can navigate clusters and groups of SE-BCTs, examine when different groups
 
 ## Associated scientific article
 
-Mazéas A, Ntoumanis N. *Toward a sequencing framework for teaching and using self-enactable behavior change techniques: a conceptual review and proposed approach* [Preprint]. 2026. https://doi.org/10.31234/osf.io/zxr7b_v1
+Mazéas, A., & Ntoumanis, N. (2026). Towards a sequencing framework for teaching and using self-enactable behaviour change techniques: a conceptual review and proposed approach, Psychology & Health, DOI: 10.1080/08870446.2026.2737650
 
 The interactive framework is intended as a companion resource to this article.
 
@@ -33,7 +33,7 @@ MIT for the software and CC BY 4.0 for original scientific/content material.
 
 If you use the Interactive SE–BCT Sequencing Framework, please cite:
 
-> Mazéas A, Ntoumanis N. *Toward a sequencing framework for teaching and using self-enactable behavior change techniques: a conceptual review and proposed approach* [Preprint]. 2026. https://doi.org/10.31234/osf.io/zxr7b_v1
+> Mazéas, A., & Ntoumanis, N. (2026). Towards a sequencing framework for teaching and using self-enactable behaviour change techniques: a conceptual review and proposed approach, Psychology & Health, DOI: 10.1080/08870446.2026.2737650
 
 If you specifically use or refer to the interactive web-based implementation, you may additionally cite the archived software version:
 
